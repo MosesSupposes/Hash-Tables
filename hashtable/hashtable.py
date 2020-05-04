@@ -10,6 +10,10 @@ class HashTableEntry:
 
 
 class HashTable:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.storage = []
+
     """
     A hash table that with `capacity` buckets
     that accepts string keys
@@ -17,19 +21,21 @@ class HashTable:
     Implement this.
     """
 
+    # This is a fnv 32-bit hash
     def fnv1(self, key):
-        """
-        FNV-1 64-bit hash function
-
-        Implement this, and/or DJB2.
-        """
+        hval = 0x811c9dc5
+        fnv_32_prime = 0x01000193
+        uint32_max = 2 ** 32
+        for letter in key:
+            hval = hval ^ ord(letter)
+            hval = (hval * fnv_32_prime) % uint32_max
+        return hval
 
     def djb2(self, key):
-        """
-        DJB2 32-bit hash function
-
-        Implement this, and/or FNV-1.
-        """
+        hash = 5381
+        for letter in key:
+            hash = (( hash << 5) + hash) + ord(letter)
+        return hash & 0xFFFFFFFF
 
     def hash_index(self, key):
         """
