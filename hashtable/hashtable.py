@@ -21,7 +21,7 @@ class HashTable:
     Implement this.
     """
 
-    # This is a fnv 32-bit hash
+    # This is an fnv 32-bit hash
     def fnv1(self, key):
         hval = 0x811c9dc5
         fnv_32_prime = 0x01000193
@@ -31,6 +31,7 @@ class HashTable:
             hval = (hval * fnv_32_prime) % uint32_max
         return hval
 
+    # This is an fnv 64-bit hash
     def fnv164(self, key):
         """
         FNV-1 64-bit hash function
