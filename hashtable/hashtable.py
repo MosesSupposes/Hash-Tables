@@ -10,10 +10,6 @@ class HashTableEntry:
 
 
 class HashTable:
-    def __init__(self, capacity):
-        self.capacity = capacity
-        self.storage = [None] * capacity
-
     """
     A hash table that with `capacity` buckets
     that accepts string keys
@@ -35,32 +31,24 @@ class HashTable:
     def fnv164(self, key):
         """
         FNV-1 64-bit hash function
+
         Implement this, and/or DJB2.
         """
-        str_bytes = str(key).encode()
-        FNV_offset_basis = 14695981039346656037
-        FNV_prime = 1099511628211
-        hash = FNV_offset_basis
-        for byte_of_data in str_bytes:
-            hash = hash * FNV_prime
-            hash = hash ^ byte_of_data
-        hash &= 0xffffffffffffffff
-        return hash
 
     def djb2(self, key):
-        hash = 5381
-        for letter in key:
-            hash = (( hash << 5) + hash) + ord(letter)
-        return hash & 0xFFFFFFFF
+        """
+        DJB2 32-bit hash function
+
+        Implement this, and/or FNV-1.
+        """
 
     def hash_index(self, key):
         """
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        # return self.fnv1(key) % self.capacity
-        return self.fnv164(key) % self.capacity
-        # return self.djb2(key) % self.capacity
+        #return self.fnv1(key) % self.capacity
+        return self.djb2(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -70,7 +58,6 @@ class HashTable:
 
         Implement this.
         """
-        self.storage[self.hash_index(key)] = value
 
     def delete(self, key):
         """
@@ -81,12 +68,6 @@ class HashTable:
         Implement this.
         """
 
-        try: 
-            self.storage[self.hash_index(key)] = None
-
-        except Exception as e:
-            print("Couldn't find the value stored at the given key:", e)
-
     def get(self, key):
         """
         Retrieve the value stored with the given key.
@@ -95,12 +76,6 @@ class HashTable:
 
         Implement this.
         """
-
-        try:
-            return self.storage[self.hash_index(key)]
-
-        except Exception: 
-            return None 
 
     def resize(self):
         """
