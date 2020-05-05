@@ -64,13 +64,13 @@ class HashedLinkedList:
         previous_node = find_previous_node(prev, cur)
         if previous_node is not None and previous_node != "null":
             previous_node.next = previous_node.next.next
-            return "Success"
+            return 1 
         # If the key to remove is the head of the list...
         elif previous_node == "null":
             self.head = self.head.next
-            return "Success"
+            return 1
         else:
-            return None
+            return 0
 
         
 
