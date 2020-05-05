@@ -1,13 +1,4 @@
-class HashTableEntry:
-    """
-    Hash Table entry, as a linked list node.
-    """
-
-    def __init__(self, key, value):
-        self.key = key
-        self.value = value
-        self.next = None
-
+from LinkedList import HashedLinkedList, HashTableEntry
 
 class HashTable:
     def __init__(self, capacity):
@@ -56,7 +47,7 @@ class HashTable:
     def hash_index(self, key):
         """
         Take an arbitrary key and return a valid integer index
-        between within the storage capacity of the hash table.
+        within the range of the storage capacity of the hash table.
         """
         # return self.fnv1(key) % self.capacity
         return self.fnv164(key) % self.capacity
@@ -70,7 +61,18 @@ class HashTable:
 
         Implement this.
         """
-        self.storage[self.hash_index(key)] = value
+        # hll is short for "hashed_linked_list"
+        hll = self.storage[self.hash_index(key)]
+        if hll is None:
+            # Create a Linked List and stuff it inside
+            self.storage[self.hash_index(key)] = HashedLinkedList(HashTableEntry(key, value))
+        else:
+            # Append to the existing linked list if it's a new key, 
+            # if it's an existing key, update the value of that node
+            if hll.find_node(key) is None: 
+                hll.add_to_tail(key, value)
+            else:
+                hll.update_node(key, value)
 
     def delete(self, key):
         """
@@ -80,12 +82,12 @@ class HashTable:
 
         Implement this.
         """
+        if self.storage[self.hash_index(key)] is None:
+            print("Couldn't find the value stored at the given key")
+        else:
+            # Returns a 1 if successful or a 0 otherwise
+            return self.storage[self.hash_index(key)].remove_node(key)
 
-        try: 
-            self.storage[self.hash_index(key)] = None
-
-        except Exception as e:
-            print("Couldn't find the value stored at the given key:", e)
 
     def get(self, key):
         """
@@ -95,12 +97,19 @@ class HashTable:
 
         Implement this.
         """
-
+        linked_list = None
         try:
-            return self.storage[self.hash_index(key)]
-
-        except Exception: 
+            linked_list = self.storage[self.hash_index(key)]
+        except IndexError: 
             return None 
+        else:
+            if linked_list is None:
+                return None
+            else: 
+                if linked_list.find_node(key) is not None:
+                    return linked_list.find_node(key).value
+                else:
+                    return None
 
     def resize(self):
         """
