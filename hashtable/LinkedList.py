@@ -1,6 +1,13 @@
-from hashtable import HashTableEntry
-
+class HashTableEntry:
+    """
+    Hash Table entry, as a linked list node.
+    """
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.next = None
 # What differentiates this Linked List from a regular Linked List is that this Linked List uses "HashTableEntries" as its nodes
+
 class HashedLinkedList:
     def __init__(self, head=None):
         self.head = head
