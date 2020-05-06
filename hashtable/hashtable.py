@@ -76,7 +76,7 @@ class HashTable:
         
         # Resize the hash table if we've reached 70% capacity
         if self.determine_load_factor() >= 0.7:
-            self.resize()
+            self.resize(expand=True)
 
 
     def delete(self, key):
@@ -117,14 +117,20 @@ class HashTable:
                 else:
                     return None
 
-    def resize(self):
+    # def resize(self, **shrinkOrExpand):
+    def resize(self, **shrinkOrExpand):
         """
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
 
         Implement this.
         """
-        proxy_hash_table = HashTable(self.capacity * 2)
+        if "shrink" in shrinkOrExpand and shrinkOrExpand["shrink"] == True:
+            # Clamp the capacity of the new storage to 8
+            proxy_hash_table = HashTable(max(8, self.capacity / 2))
+        if "expand" in shrinkOrExpand and shrinkOrExpand["expand"] == True:
+            proxy_hash_table = HashTable(self.capacity * 2)
+
 
         for linked_list in self.storage:
             if linked_list is not None:
