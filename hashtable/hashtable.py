@@ -91,7 +91,12 @@ class HashTable:
             print("Couldn't find the value stored at the given key")
         else:
             # Returns a 1 if successful or a 0 otherwise
-            return self.storage[self.hash_index(key)].remove_node(key)
+            success_or_fail = self.storage[self.hash_index(key)].remove_node(key)
+
+            if self.determine_load_factor() <= 0.2:
+                self.resize(shrink=True)
+            
+            return success_or_fail
 
 
     def get(self, key):
