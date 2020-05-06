@@ -73,6 +73,11 @@ class HashTable:
                 hll.add_to_tail(key, value)
             else:
                 hll.update_node(key, value)
+        
+        # Resize the hash table if we've reached 70% capacity
+        if self.determine_load_factor() >= 0.7:
+            self.resize()
+
 
     def delete(self, key):
         """
@@ -106,8 +111,9 @@ class HashTable:
             if linked_list is None:
                 return None
             else: 
-                if linked_list.find_node(key) is not None:
-                    return linked_list.find_node(key).value
+                node = linked_list.find_node(key) 
+                if node is not None:
+                    return node.value
                 else:
                     return None
 
@@ -118,6 +124,40 @@ class HashTable:
 
         Implement this.
         """
+        proxy_hash_table = HashTable(self.capacity * 2)
+
+        for linked_list in self.storage:
+            if linked_list is not None:
+                # for each item in the linked list, add it to the proxy hash table
+                linked_list.for_each(lambda node: proxy_hash_table.put(node.key, node.value))
+
+
+        # Set the storage of the exsiting hash table to that of the proxy hash table
+        self.storage = proxy_hash_table.storage
+    
+    # TODO: refactor the HashedLinkedList class to reutrn a count
+    def determine_load_factor(self):
+        num_items = 0
+        for linked_list in self.storage:
+            if linked_list is not None:
+                num_items += linked_list.size
+        return num_items / len(self.storage)
+        # ====================================================================================
+        # The following code is how to implement this function if the linked list class didn't
+        # have a size property. This solution is less performant than the solution that can be 
+        # derived from a linked list that does provide a size property.
+        # ==================================================================================== 
+        # num_items = 0
+        # def tally_nodes(node, count):
+        #     if node is None:
+        #         return count
+        #     return tally_nodes(node.next, count + 1)
+
+        # for linked_list in self.storage:
+        #     num_items += 0 if linked_list is None else tally_nodes(linked_list.head, num_items)
+        
+        # return num_items / len(self.storage)
+
 
 if __name__ == "__main__":
     ht = HashTable(2)
@@ -127,6 +167,8 @@ if __name__ == "__main__":
     ht.put("line_3", "Linked list saves the day!")
 
     print("")
+
+    print("right here", ht.determine_load_factor())
 
     # Test storing beyond capacity
     print(ht.get("line_1"))
