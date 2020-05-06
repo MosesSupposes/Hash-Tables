@@ -54,6 +54,13 @@ class HashedLinkedList:
                 return look_until_found(node.next)
 
         return look_until_found(self.head)
+    
+    def update_node(self, key, value):
+        node_to_update = self.find_node(key)
+        if node_to_update is not None:
+            node_to_update.value = value
+        else:
+            return None
 
     def remove_node(self, key):
         cur = self.head
