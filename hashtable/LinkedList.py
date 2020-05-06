@@ -90,8 +90,17 @@ class HashedLinkedList:
             return 1
         else:
             return 0
+    
+    def for_each(self, cb):
+        def recur(node):
+            if node is None:
+                return
+            cb(node)
+            recur(node.next)
 
-        
+        recur(self.head)
+
+
 
 
 
