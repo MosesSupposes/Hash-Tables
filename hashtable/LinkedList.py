@@ -12,6 +12,7 @@ class HashedLinkedList:
     def __init__(self, head=None):
         self.head = head
         self.tail = head
+        self.size = 1 if head else 0
     
     def add_to_head(self, key, value):
         if self.head is None:
@@ -36,6 +37,7 @@ class HashedLinkedList:
         if self.head is None:
             self.head = HashTableEntry(key, value)
             self.tail = self.head 
+            self.size += 1
             return 
         else:
             tail = find_tail(self.head)
@@ -43,6 +45,7 @@ class HashedLinkedList:
             tail.next = n
             n.next = None
             self.tail = n
+            self.size += 1
         
     def find_node(self, key):
         def look_until_found(node):
@@ -78,10 +81,12 @@ class HashedLinkedList:
         previous_node = find_previous_node(prev, cur)
         if previous_node is not None and previous_node != "null":
             previous_node.next = previous_node.next.next
+            self.size -= 1
             return 1 
         # If the key to remove is the head of the list...
         elif previous_node == "null":
             self.head = self.head.next
+            self.size -= 1
             return 1
         else:
             return 0
