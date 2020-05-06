@@ -106,9 +106,8 @@ class HashTable:
             if linked_list is None:
                 return None
             else: 
-                node = linked_list.find_node(key) 
-                if node is not None:
-                    return node.value
+                if linked_list.find_node(key) is not None:
+                    return linked_list.find_node(key).value
                 else:
                     return None
 
