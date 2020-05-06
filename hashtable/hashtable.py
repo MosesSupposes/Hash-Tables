@@ -145,7 +145,6 @@ class HashTable:
         # Set the storage of the exsiting hash table to that of the proxy hash table
         self.storage = proxy_hash_table.storage
     
-    # TODO: refactor the HashedLinkedList class to reutrn a count
     def determine_load_factor(self):
         num_items = 0
         for linked_list in self.storage:
