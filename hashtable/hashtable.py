@@ -130,18 +130,17 @@ class HashTable:
 
         Implement this.
         """
-        if "shrink" in shrinkOrExpand and shrinkOrExpand["shrink"] == True:
+        # if "shrink" in shrinkOrExpand and shrinkOrExpand["shrink"] == True:
+        if shrinkOrExpand.get("shrink") == True:
             # Clamp the capacity of the new storage to 8
             proxy_hash_table = HashTable(max(8, self.capacity / 2))
-        if "expand" in shrinkOrExpand and shrinkOrExpand["expand"] == True:
+        if shrinkOrExpand.get("expand") == True:
             proxy_hash_table = HashTable(self.capacity * 2)
-
 
         for linked_list in self.storage:
             if linked_list is not None:
                 # for each item in the linked list, add it to the proxy hash table
                 linked_list.for_each(lambda node: proxy_hash_table.put(node.key, node.value))
-
 
         # Set the storage of the exsiting hash table to that of the proxy hash table
         self.storage = proxy_hash_table.storage
