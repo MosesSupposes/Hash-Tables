@@ -1,5 +1,17 @@
 def no_dups(s):
-    # Implement me.
+    if s == "":
+        return s
+
+    words = {}
+    for word in s.split(" "):
+        if word not in words:
+            words[word] = True 
+
+    word_without_dups = ""
+    for word in words.keys():
+        word_without_dups += f" {word}"
+    
+    return word_without_dups.lstrip()
 
 
 if __name__ == "__main__":
